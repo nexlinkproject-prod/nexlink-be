@@ -1,24 +1,21 @@
-options:
-  logging: CLOUD_LOGGING_ONLY
-  logsBucket: gs://log-nexlink
-
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/nexlink-prod/nexlink-be:latest', '.']
+    args: ['build', '-t', 'gcr.io/nexlink-prod/nexlink-be:'latest', '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/nexlink-prod/nexlink-be:latest']
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'bash'
+    entrypoint: 'gcloud'
     args:
-      - '-c'
-      - |
-        echo "Starting deployment to Cloud Run"
-        gcloud run deploy nexlink-be \
-          --image gcr.io/nexlink-prod/nexlink-be:latest \
-          --platform managed \
-          --region asia-southeast2 \
-          --allow-unauthenticated
-        echo "Deployment completed"
+      - 'run'
+      - 'deploy'
+      - 'nexlink-be'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/nexlink-be'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'asia-southeast2'
+      - '--allow-unauthenticated'
 
 images:
-  - 'gcr.io/nexlink-prod/nexlink-be:latest'
+  - 'gcr.io/$PROJECT_ID/nexlink-be'
