@@ -7,18 +7,17 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/nexlink-prod/nexlink-be:latest']
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
+    entrypoint: 'bash'
     args:
-      - 'run'
-      - 'deploy'
-      - 'nexlink-be'
-      - '--image'
-      - 'gcr.io/nexlink-prod/nexlink-be:latest'
-      - '--platform'
-      - 'managed'
-      - '--region'
-      - 'asia-southeast2'
-      - '--allow-unauthenticated'
+      - '-c'
+      - |
+        echo "Starting deployment to Cloud Run"
+        gcloud run deploy nexlink-be \
+          --image gcr.io/nexlink-prod/nexlink-be:latest \
+          --platform managed \
+          --region asia-southeast2 \
+          --allow-unauthenticated
+        echo "Deployment completed"
 
 images:
   - 'gcr.io/nexlink-prod/nexlink-be:latest'
