@@ -1,3 +1,6 @@
+options:
+  logsBucket: gs://log-nexlink
+
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/nexlink-prod/nexlink-be:latest', '.']
